@@ -22,8 +22,3 @@ def query_openai(prompt, model=GPT_MODEL, max_tokens=MAX_GPT_TOKENS):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return None
-
-prompt = "What is the capital of France?"
-result = query_openai(prompt)
-if result:
-    print(result)
