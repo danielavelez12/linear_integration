@@ -6,18 +6,20 @@ load_dotenv()
 
 LINEAR_API_URL = "https://api.linear.app/graphql"
 
-def query_linear_api(query):
-    
+def get_linear_headers():
     access_token = os.getenv("LINEAR_TOKEN")
     if not access_token:
         raise ValueError("Linear token not found.")
-
-    headers = {
+    return {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {access_token}"
     }
+
+def query_linear_api(query, variables=None):
+    headers = get_linear_headers()
     payload = {
-        "query": query
+        "query": query,
+        "variables": variables
     }
 
     response = requests.post(LINEAR_API_URL, json=payload, headers=headers)
@@ -27,10 +29,17 @@ def query_linear_api(query):
     else:
         raise Exception(f"Query failed with status code: {response.status_code}")
 
-query = "{ issues { nodes { id title } } }"
-
-try:
+def get_linear_tasks():
+    query = """
+    query {
+        issues {
+            nodes {
+                id
+                title
+                description
+            }
+        }
+    }
+    """
     result = query_linear_api(query)
-    print(result)
-except Exception as e:
-    print(f"An error occurred: {str(e)}")
+    return result['data']['issues']['nodes']

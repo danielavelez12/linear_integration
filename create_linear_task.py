@@ -73,13 +73,3 @@ def create_linear_task(title, description, team_name):
         return response.json()
     else:
         raise Exception(f"Mutation failed with status code: {response.status_code}")
-
-try:
-    result = create_linear_task(
-        title="New Task Title",
-        description="This is a description of the new task.",
-        team_name="Engineering"
-    )
-    print(result)
-except Exception as e:
-    print(f"An error occurred: {str(e)}")
